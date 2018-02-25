@@ -1,21 +1,21 @@
 package app
 
 import (
-	"log"
-	"time"
-	"image"
-	"image/color"
+	"github.com/markoczy/gogameoflife/game"
 	"golang.org/x/exp/shiny/driver"
 	"golang.org/x/exp/shiny/screen"
 	"golang.org/x/mobile/event/lifecycle"
 	"golang.org/x/mobile/event/paint"
-	"github.com/markoczy/gogameoflife/game")
-
+	"image"
+	"image/color"
+	"log"
+	"time"
+)
 
 var (
-	black    = color.RGBA{0x00, 0x00, 0x00, 0x00}
-	white    = color.RGBA{0xff, 0xff, 0xff, 0xff}
-	pos0     = image.Point{0, 0}
+	black = color.RGBA{0x00, 0x00, 0x00, 0x00}
+	white = color.RGBA{0xff, 0xff, 0xff, 0xff}
+	pos0  = image.Point{0, 0}
 
 	interrupt = false
 )
@@ -25,16 +25,15 @@ type App interface {
 }
 
 func NewScreenApp(width, height, scale, tick int) App {
-	return &screenApp {
-		width: width,
+	return &screenApp{
+		width:  width,
 		height: height,
-		scale: scale,
-		tick: tick }
+		scale:  scale,
+		tick:   tick}
 }
 
 type screenApp struct {
-	width, height, scale int
-	tick int
+	width, height, scale, tick int
 }
 
 func (app *screenApp) Run(g game.Game) error {
@@ -45,11 +44,11 @@ func (app *screenApp) Run(g game.Game) error {
 	// Start Application and Game Thread
 	go driver.Main(func(s screen.Screen) {
 		// Init Window
-		w, err := s.NewWindow(&screen.NewWindowOptions {
-			Width: app.width, 
-			Height: app.height, 
-			Title: "Application Window" })
-		if err != nil { 
+		w, err := s.NewWindow(&screen.NewWindowOptions{
+			Width:  app.width,
+			Height: app.height,
+			Title:  "Application Window"})
+		if err != nil {
 			chErr <- err
 			return
 		}
@@ -82,7 +81,7 @@ func (app *screenApp) Run(g game.Game) error {
 					log.Printf("Sleeping %d millis", sleep)
 					time.Sleep(time.Duration(sleep) * time.Millisecond)
 				} else {
-					log.Printf("Overdue %d millis", -sleep)					
+					log.Printf("Overdue %d millis", -sleep)
 				}
 			}
 		}()
@@ -104,25 +103,26 @@ func (app *screenApp) Run(g game.Game) error {
 	// Wait for interruption or error signal
 	for {
 		select {
-			case err := <- chErr:
-				return err
-			case <- chInterrupt:
-				return nil
+		case err := <-chErr:
+			return err
+		case <-chInterrupt:
+			return nil
 		}
 	}
 }
 
 func (app *screenApp) getPixelRect(x, y int) image.Rectangle {
 	return image.Rectangle{
-		image.Point{x*app.scale, y*app.scale}, 
-		image.Point{(x*app.scale)+app.scale, (y*app.scale)+app.scale }}
+		image.Point{x * app.scale, y * app.scale},
+		image.Point{(x * app.scale) + app.scale, (y * app.scale) + app.scale}}
 }
 
 func (app *screenApp) drawGrid(grid [][]bool, output screen.Texture) {
 	for iRow, row := range grid {
 		for iCell, cell := range row {
-			if cell { 
-				output.Fill(app.getPixelRect(iCell, iRow), black, screen.Src) }
+			if cell {
+				output.Fill(app.getPixelRect(iCell, iRow), black, screen.Src)
+			}
 		}
 	}
 }

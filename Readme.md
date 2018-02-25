@@ -21,6 +21,8 @@
 - Start in Debug Mode: `gol -debug`
 - Change Seed Density: `gol -density=0.2`
 - Set window dimensions: `gol -width=2400 -height=1200`
+- Use glider seeder: `gol -seeder=random.gliders`
 
 > Other seeder implementations are work in progress, at the moment there's only
-`default.random` which randomizes each cell separatly
+`default.random` which randomizes each cell separatly and `random.gliders` which 
+creates a set of gliders at random

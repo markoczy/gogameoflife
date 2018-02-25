@@ -1,12 +1,18 @@
 package game
 
+// NewGame creates a new game with the provided seeder
 func NewGame(width, height int, seeder Seeder) (Game, error) {
-	ret := game{ width: width, height: height}
-	data, err := seeder.Seed(&ret)
-	if err != nil { return nil, err }
-	ret.data = data
+	ret := game{
+		grid: Grid{Width: width, Height: height}}
+	data, err := seeder.Seed(width, height)
+	if err != nil {
+		return nil, err
+	}
+	ret.grid = data
 	return &ret, nil
 }
+
+// Game exported interface of a game
 type Game interface {
 	Width() int
 	Height() int
@@ -15,26 +21,24 @@ type Game interface {
 }
 
 func (g *game) Width() int {
-	return g.width
+	return g.grid.Width
 }
 
 func (g *game) Height() int {
-	return g.height
+	return g.grid.Height
 }
-
 
 func (g *game) Render() ([][]bool, error) {
-	return g.data, nil
+	return g.grid.Data, nil
 }
 
-
 func (g *game) Tick() error {
-	data := make([][]bool, g.height)
-	for iRow, row := range g.data {
-		data[iRow] = make([]bool, g.width)
-		for iCell, _ := range row {
-			neighbours := g.countNeighbours(iCell, iRow)
-			if !g.data[iRow][iCell] {
+	data := make([][]bool, g.grid.Height)
+	for iRow, row := range g.grid.Data {
+		data[iRow] = make([]bool, g.grid.Width)
+		for iCell := range row {
+			neighbours := g.grid.CountNeighboursAt(iCell, iRow)
+			if !g.grid.Data[iRow][iCell] {
 				if neighbours == 3 {
 					data[iRow][iCell] = true // live
 				}
@@ -47,39 +51,24 @@ func (g *game) Tick() error {
 			}
 		}
 	}
-	g.data = data
+	g.grid.Data = data
 	return nil
 }
 
 type game struct {
-	data   [][]bool
-	width  int
-	height int
+	grid Grid
 }
 
-func (g *game) countNeighbours(x, y int) int {
-	ret := 0
-	for iX := x - 1; iX < x+2; iX++ {
-		for iY := y - 1; iY < y+2; iY++ {
-			if !(iX == x && iY == y) && g.getCellAt(iX, iY) {
-				ret += 1
-			}
-		}
-	}
-	return ret
-}
+// func (g *game) getCellAt(x, y int) bool {
+// 	return g.data[mod(y, g.height)][mod(x, g.width)]
+// }
 
-func (g *game) getCellAt(x, y int) bool {
-	return g.data[mod(y, g.height)][mod(x, g.width)]
-}
-
-func mod(val, mod int) int {
-	if val >= 0 {
-		return val % mod
-	} else {
-		for val < 0 {
-			val += mod
-		}
-		return val
-	}
-}
+// func mod(val, mod int) int {
+// 	if val >= 0 {
+// 		return val % mod
+// 	}
+// 	for val < 0 {
+// 		val += mod
+// 	}
+// 	return val
+// }

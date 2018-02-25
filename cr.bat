@@ -7,8 +7,9 @@
 :: go build -o gol.exe -ldflags -H=windowsgui
 go build -o gol.exe
 
-:: Launch:
+:: Launch
 gol -fps=10 -seeder=random.default -density=0.1 -debug
+:: Alternative: gol -seeder=random.gliders -debug
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Valid Params and defaults for launch (type "gol -h" to view):
