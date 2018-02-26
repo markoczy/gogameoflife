@@ -110,10 +110,6 @@ func (g *Grid) RotateFlip(rotation int, flipX, flipY bool) {
 		}
 	}
 	g.Data = data
-	// return Grid{
-	// 	Data:   data,
-	// 	Width:  width,
-	// 	Height: height}
 }
 
 // InsertGridAt insert another grid at position

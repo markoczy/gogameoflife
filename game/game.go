@@ -64,18 +64,3 @@ func (g *game) Tick() error {
 type game struct {
 	grid grid.Grid
 }
-
-// func (g *game) getCellAt(x, y int) bool {
-// 	return g.data[mod(y, g.height)][mod(x, g.width)]
-// }
-
-// func mod(val, mod int) int {
-// 	if val >= 0 {
-// 		return val % mod
-// 	}
-// 	for val < 0 {
-// 		val += mod
-// 	}
-// 	return val
-// }
-//
