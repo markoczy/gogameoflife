@@ -7,22 +7,37 @@ type Grid struct {
 }
 
 // CreateEmpty creates an empty Grid with desired width and height
-func CreateEmpty(width, height int) Grid {
+func CreateEmpty(width, height int) *Grid {
 	data := make([][]bool, height)
 	for iRow := range data {
 		data[iRow] = make([]bool, width)
 	}
-	return Grid{Data: data, Width: width, Height: height}
+	return &Grid{Data: data, Width: width, Height: height}
+}
+
+// Copy creates a copy with all values
+func (g *Grid) Copy() *Grid {
+	data := make([][]bool, g.Height)
+	for iRow, row := range g.Data {
+		data[iRow] = make([]bool, g.Width)
+		for iCol, cell := range row {
+			data[iRow][iCol] = cell
+		}
+	}
+	return &Grid{
+		Data:   data,
+		Width:  g.Width,
+		Height: g.Height}
 }
 
 // GetCellAt retreives cell value at position
-func (g Grid) GetCellAt(x, y int) bool {
+func (g *Grid) GetCellAt(x, y int) bool {
 	col, row := getPos(x, y, g.Width, g.Height)
 	return g.Data[row][col]
 }
 
 // CountNeighboursAt counts neighbours at position
-func (g Grid) CountNeighboursAt(x, y int) int {
+func (g *Grid) CountNeighboursAt(x, y int) int {
 	ret := 0
 	for iX := x - 1; iX < x+2; iX++ {
 		for iY := y - 1; iY < y+2; iY++ {
@@ -35,7 +50,7 @@ func (g Grid) CountNeighboursAt(x, y int) int {
 }
 
 // RotateFlip rotate and/or flip Prefab
-func (g Grid) RotateFlip(rotation int, flipX, flipY bool) Grid {
+func (g *Grid) RotateFlip(rotation int, flipX, flipY bool) {
 	// _                        _
 	//  |  =>  _|  =>  |_  =>  |
 	//
@@ -94,13 +109,15 @@ func (g Grid) RotateFlip(rotation int, flipX, flipY bool) Grid {
 			data[iRow][iCol] = g.Data[row][col]
 		}
 	}
-	return Grid{
-		Data:   data,
-		Width:  width,
-		Height: height}
+	g.Data = data
+	// return Grid{
+	// 	Data:   data,
+	// 	Width:  width,
+	// 	Height: height}
 }
 
-func (g Grid) InsertGridAt(grid Grid, x, y int) Grid {
+// InsertGridAt insert another grid at position
+func (g *Grid) InsertGridAt(grid *Grid, x, y int) {
 	for iRow, row := range grid.Data {
 		for iCol := range row {
 			col, row := getPos(iCol+x, iRow+y, g.Width, g.Height)
@@ -109,10 +126,9 @@ func (g Grid) InsertGridAt(grid Grid, x, y int) Grid {
 			}
 		}
 	}
-	return Grid{Data: g.Data, Width: g.Width, Height: g.Height}
 }
 
-func (g Grid) String() string {
+func (g *Grid) String() string {
 	ret := ""
 	for _, row := range g.Data {
 		for _, cell := range row {

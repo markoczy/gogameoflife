@@ -7,13 +7,14 @@ import (
 
 // NewGame creates a new game with the provided seeder
 func NewGame(width, height int, seeder seeder.Seeder) (Game, error) {
+	// refactor me
 	ret := game{
 		grid: grid.Grid{Width: width, Height: height}}
 	data, err := seeder.Seed(width, height)
 	if err != nil {
 		return nil, err
 	}
-	ret.grid = data
+	ret.grid = *data
 	return &ret, nil
 }
 

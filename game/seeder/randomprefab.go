@@ -13,7 +13,7 @@ type randomSinglePrefab struct {
 	seed       int64
 }
 
-func (d *randomSinglePrefab) Seed(width, height int) (grid.Grid, error) {
+func (d *randomSinglePrefab) Seed(width, height int) (*grid.Grid, error) {
 	rand.Seed(int64(d.seed))
 	grid := grid.CreateEmpty(width, height)
 	prefab := prefabs.Get(d.prefab, 0, false, false)
@@ -29,7 +29,7 @@ func (d *randomSinglePrefab) Seed(width, height int) (grid.Grid, error) {
 		flipY := rand.Float64() > 0.5
 		prefab = prefabs.Get(d.prefab, rot, flipX, flipY)
 		log.Printf("Seeding x: %d, y: %d, rot: %d, flipX: %v, flipY: %v\n", x, y, rot, flipX, flipY)
-		grid = grid.InsertGridAt(prefab, x, y)
+		grid.InsertGridAt(prefab, x, y)
 	}
 	return grid, nil
 }

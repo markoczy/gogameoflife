@@ -10,7 +10,7 @@ type defaultRandom struct {
 	seed       int64
 }
 
-func (d *defaultRandom) Seed(width, height int) (grid.Grid, error) {
+func (d *defaultRandom) Seed(width, height int) (*grid.Grid, error) {
 	rand.Seed(int64(d.seed))
 	data := make([][]bool, height)
 	for iRow := range data {
@@ -19,7 +19,7 @@ func (d *defaultRandom) Seed(width, height int) (grid.Grid, error) {
 			data[iRow][iCell] = rand.Float64() > (1 - d.percentage)
 		}
 	}
-	return grid.Grid{
+	return &grid.Grid{
 		Data:   data,
 		Width:  width,
 		Height: height}, nil
