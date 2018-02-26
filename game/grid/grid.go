@@ -1,4 +1,4 @@
-package game
+package grid
 
 // Grid binary matrix with height and width
 type Grid struct {
@@ -6,8 +6,8 @@ type Grid struct {
 	Width, Height int
 }
 
-// NewEmptyGrid creates an empty Grid with desired width and height
-func NewEmptyGrid(width, height int) Grid {
+// CreateEmpty creates an empty Grid with desired width and height
+func CreateEmpty(width, height int) Grid {
 	data := make([][]bool, height)
 	for iRow := range data {
 		data[iRow] = make([]bool, width)

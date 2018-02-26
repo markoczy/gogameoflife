@@ -1,9 +1,14 @@
 package game
 
+import (
+	"github.com/markoczy/gogameoflife/game/grid"
+	"github.com/markoczy/gogameoflife/game/seeder"
+)
+
 // NewGame creates a new game with the provided seeder
-func NewGame(width, height int, seeder Seeder) (Game, error) {
+func NewGame(width, height int, seeder seeder.Seeder) (Game, error) {
 	ret := game{
-		grid: Grid{Width: width, Height: height}}
+		grid: grid.Grid{Width: width, Height: height}}
 	data, err := seeder.Seed(width, height)
 	if err != nil {
 		return nil, err
@@ -56,7 +61,7 @@ func (g *game) Tick() error {
 }
 
 type game struct {
-	grid Grid
+	grid grid.Grid
 }
 
 // func (g *game) getCellAt(x, y int) bool {
@@ -72,3 +77,4 @@ type game struct {
 // 	}
 // 	return val
 // }
+//

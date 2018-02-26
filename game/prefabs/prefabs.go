@@ -1,10 +1,12 @@
-package game
+package prefabs
+
+import "github.com/markoczy/gogameoflife/game/grid"
 
 var prefabs = initPrefabs()
 
-func initPrefabs() map[string]Grid {
-	ret := make(map[string]Grid)
-	ret["glider"] = Grid{
+func initPrefabs() map[string]grid.Grid {
+	ret := make(map[string]grid.Grid)
+	ret["glider"] = grid.Grid{
 		Data: [][]bool{
 			[]bool{false, true, false},
 			[]bool{false, false, true},
@@ -12,7 +14,7 @@ func initPrefabs() map[string]Grid {
 		Width:  3,
 		Height: 3}
 
-	ret["test"] = Grid{
+	ret["test"] = grid.Grid{
 		Data: [][]bool{
 			[]bool{false, true, true, true},
 			[]bool{false, false, true, false},
@@ -23,7 +25,7 @@ func initPrefabs() map[string]Grid {
 	return ret
 }
 
-// GetPrefab ...
-func GetPrefab(name string, rotation int, flipX, flipY bool) Grid {
+// Get retreives Prefab by name
+func Get(name string, rotation int, flipX, flipY bool) grid.Grid {
 	return prefabs[name].RotateFlip(rotation, flipX, flipY)
 }

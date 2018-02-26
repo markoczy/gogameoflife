@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/markoczy/gogameoflife/app"
 	"github.com/markoczy/gogameoflife/game"
+	"github.com/markoczy/gogameoflife/game/seeder"
 	"io/ioutil"
 	"log"
 	"time"
@@ -37,14 +38,14 @@ func main() {
 		disableLogs()
 	}
 
-	var seed game.Seeder
+	var seed seeder.Seeder
 	switch *seederPtr {
 	case defaultSeeder:
 		nano := time.Now().UTC().UnixNano()
-		seed = game.NewDefaultRandomSeeder(nano, *densityPtr)
+		seed = seeder.CreateDefaultRandom(nano, *densityPtr)
 	case "random.gliders":
 		nano := time.Now().UTC().UnixNano()
-		seed = game.NewPrefabRandomSeeder("glider", nano, *densityPtr)
+		seed = seeder.CreatePrefabRandom("glider", nano, *densityPtr)
 	default:
 		log.Panicln("Unrecognized seeder")
 		return
